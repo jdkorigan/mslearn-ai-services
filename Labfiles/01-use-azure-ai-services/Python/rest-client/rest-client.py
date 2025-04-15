@@ -2,6 +2,24 @@ from dotenv import load_dotenv
 import os
 import http.client, base64, json, urllib
 from urllib import request, parse, error
+import sys
+
+# Check if running in debug mode
+is_debug = sys.gettrace() is not None
+if is_debug:
+    print("\n=== DEBUG MODE ===")
+    print("Script location:", os.path.abspath(__file__))
+    print("Initial working directory:", os.getcwd())
+
+# Get the directory where the script is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Change to that directory
+os.chdir(script_dir)
+
+if is_debug:
+    print("New working directory:", os.getcwd())
+    print("Environment file exists:", os.path.exists('.env'))
+    print("=== END DEBUG INFO ===\n")
 
 def main():
     global ai_endpoint
