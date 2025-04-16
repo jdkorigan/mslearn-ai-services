@@ -1,10 +1,22 @@
 from dotenv import load_dotenv
 import os
+import sys
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
 from azure.keyvault.secrets import SecretClient
 from azure.identity import ClientSecretCredential
 
+# Check if running in debug mode
+is_debug = sys.gettrace() is not None
+if is_debug:
+    print("\n=== DEBUG MODE ===")
+    print("Script location:", os.path.abspath(__file__))
+    print("Initial working directory:", os.getcwd())
+
+    # Get the directory where the script is located
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    # Change to that directory
+    os.chdir(script_dir)
 
 def main():
     global ai_endpoint
@@ -23,7 +35,7 @@ def main():
         key_vault_uri = f"https://{key_vault_name}.vault.azure.net/"
         credential = ClientSecretCredential(app_tenant, app_id, app_password)
         keyvault_client = SecretClient(key_vault_uri, credential)
-        secret_key = keyvault_client.get_secret("AI-Services-Key")
+        secret_key = keyvault_client.get_secret("Ai-Service-Key")
         cog_key = secret_key.value
 
         # Get user input (until they enter "quit")
